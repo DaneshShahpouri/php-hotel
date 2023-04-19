@@ -70,8 +70,11 @@ $ResearchArray=[];
         <label for="parking">Con o senza parcheggio</label>
 
         <select name="ordina" id="order">
-            <option value="default">Default</option>
-            <option value="voto">Votazione</option>
+            <option value="1">1 stella</option>
+            <option value="2">2 stelle</option>
+            <option value="3">3 stelle</option>
+            <option value="4">4 stelle</option>
+            <option value="5">5 stelle</option>
         </select>
 
         <input type="submit">
@@ -81,8 +84,9 @@ $ResearchArray=[];
     $searchWord = $_GET['search'];
     $isParking = $_GET['parking'];
     $order = $_GET['ordina'];
-    echo $order;
+    echo "Risultati per '" . ($searchWord != '' ? $searchWord : '') . ($isParking== 'true' ? "' con parcheggio" : "' con e senza parcheggio") . " che hanno minimo ". $order . " stelle";
     
+
 
 
     for($i=0; $i < count($hotels); $i++){
@@ -91,24 +95,26 @@ $ResearchArray=[];
             if($isParking == 'true'){
                 if($hotels[$i]['parking']){
 
-                    array_push($ResearchArray, $hotels[$i]);
+                    if($hotels[$i]['vote'] >= $order){
+                        array_push($ResearchArray, $hotels[$i]);
+
+                    }
+
                 }
 
             }else{
 
-                array_push($ResearchArray, $hotels[$i]);
+                if($hotels[$i]['vote'] >= $order){
+                    array_push($ResearchArray, $hotels[$i]);
+
+                }
               
             }
         }
 
     }
 
-    if($order == 'voto'){
-        usort($ResearchArray, function($a, $b)
-            {
-                return $a < $b; //Returns the difference. It could be less than, greater than or equal to zero
-            });
-    }
+    
         ?>
 
     <div class="content">
